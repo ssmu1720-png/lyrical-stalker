@@ -16,6 +16,7 @@ import {
   Loader2,
   Menu,
   Radio,
+  RotateCcw,
   Search,
   ShieldCheck,
   Terminal,
@@ -81,11 +82,44 @@ function valueOrDash(value: unknown) {
   return value === undefined || value === null || value === "" ? "—" : String(value);
 }
 
-function StatCell({ label, value, accent }: { label: string; value: unknown; accent?: boolean }) {
+function TypingText({ value, className, delay = 0, speed = 22 }: { value: unknown; className?: string; delay?: number; speed?: number }) {
+  const text = valueOrDash(value);
+  const [visibleText, setVisibleText] = useState("");
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setVisibleText(text);
+      return;
+    }
+
+    setVisibleText("");
+    let intervalId: number | undefined;
+    const startId = window.setTimeout(() => {
+      let cursor = 0;
+      intervalId = window.setInterval(() => {
+        cursor += 1;
+        setVisibleText(text.slice(0, cursor));
+        if (cursor >= text.length && intervalId) {
+          window.clearInterval(intervalId);
+        }
+      }, speed);
+    }, delay);
+
+    return () => {
+      window.clearTimeout(startId);
+      if (intervalId) window.clearInterval(intervalId);
+    };
+  }, [text, delay, speed]);
+
+  return <span className={`typing-text ${className || ""}`}>{visibleText || "\u00a0"}</span>;
+}
+
+function StatCell({ label, value, accent, delay = 0 }: { label: string; value: unknown; accent?: boolean; delay?: number }) {
   return (
     <div className="stat-cell">
       <span className="data-label">{label}</span>
-      <strong className={accent ? "stat-value stat-value-accent" : "stat-value"}>{valueOrDash(value)}</strong>
+      <strong className={accent ? "stat-value stat-value-accent" : "stat-value"}><TypingText value={value} delay={delay} speed={38} /></strong>
     </div>
   );
 }
@@ -144,6 +178,18 @@ export default function Home() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  function resetConsole() {
+    setUsername("");
+    setPayload(null);
+    setRawResponse(null);
+    setStatus("idle");
+    setErrorMessage("");
+    setAvatarFailed(false);
+    setRequestInfo({ elapsed: "—", requestedAt: "—", httpStatus: "—" });
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+    toast.success("Console cleared.");
+  }
 
   async function runLookup(event?: FormEvent) {
     event?.preventDefault();
@@ -255,7 +301,7 @@ export default function Home() {
           <section className="query-panel panel-surface">
             <div className="panel-heading-row">
               <SectionLabel number="00">REQUEST</SectionLabel>
-              <span className="mono-muted">POSTMAN / READY</span>
+              <div className="query-actions"><button className="clear-button" onClick={resetConsole} disabled={status === "idle"}><RotateCcw size={13} /> CLEAR CONSOLE</button><span className="mono-muted">POSTMAN / READY</span></div>
             </div>
             <form onSubmit={runLookup} className="query-form">
               <div className="input-shell">
@@ -309,17 +355,17 @@ export default function Home() {
                       {metadata.avatar && !avatarFailed ? <img src={metadata.avatar} alt={`${valueOrDash(metadata.fullName)} profile avatar`} onError={() => setAvatarFailed(true)} /> : <div className="avatar-fallback">{getInitials(metadata.fullName, profileHandle)}</div>}
                       <span className="avatar-corner" />
                     </div>
-                    <div className="identity-copy"><span className="handle">@{valueOrDash(profileHandle)}</span><h2>{valueOrDash(metadata.fullName)}</h2><span className="identity-source"><Instagram size={13} /> instagram / public</span></div>
+                    <div className="identity-copy"><span className="handle">@<TypingText value={profileHandle} delay={60} speed={34} /></span><h2><TypingText value={metadata.fullName} delay={120} speed={34} /></h2><span className="identity-source"><Instagram size={13} /> instagram / public</span></div>
                   </div>
-                  <p className="bio">{valueOrDash(metadata.bio)}</p>
+                  <p className="bio"><TypingText value={metadata.bio} delay={220} speed={9} /></p>
                   <div className="identity-footer"><span className="mono-muted">SOURCE / KYZZ</span><a href={`https://www.instagram.com/${profileHandle}`} target="_blank" rel="noreferrer">Open profile <ExternalLink size={13} /></a></div>
                 </div>
                 <div className="audience-card panel-surface">
                   <div className="panel-heading-row"><SectionLabel number="02">AUDIENCE</SectionLabel><Eye size={16} className="muted-icon" /></div>
                   <div className="stats-grid">
-                    <StatCell label="posts" value={metadata.posts} accent />
-                    <StatCell label="followers" value={metadata.followers} accent />
-                    <StatCell label="following" value={metadata.following} />
+                    <StatCell label="posts" value={metadata.posts} accent delay={160} />
+                    <StatCell label="followers" value={metadata.followers} accent delay={220} />
+                    <StatCell label="following" value={metadata.following} delay={280} />
                   </div>
                   <div className="audience-footer"><span className="signal-bar" /><span>public counters returned as strings</span></div>
                 </div>
@@ -333,13 +379,13 @@ export default function Home() {
                 </div>
                 <div className="service-card panel-surface">
                   <div className="service-visual" aria-hidden="true" />
-                  <div className="service-content"><div className="panel-heading-row"><SectionLabel number="04">STORY SERVICE</SectionLabel><span className={`service-status ${storiesData?.status === "error" ? "service-status-error" : ""}`}><span /> {valueOrDash(storiesData?.status).toUpperCase()}</span></div><h3>{storiesData?.status === "error" ? "Stories not available." : "Stories service responded."}</h3><p>The endpoint returned a service state alongside the profile metadata.</p><div className="service-meta"><span><span className="data-label">COUNTRY</span><strong>{valueOrDash(storiesData?.country)}</strong></span><span><span className="data-label">SERVER CODE</span><strong>{valueOrDash(storiesData?.serverCode)}</strong></span></div></div>
+                  <div className="service-content"><div className="panel-heading-row"><SectionLabel number="04">STORY SERVICE</SectionLabel><span className={`service-status ${storiesData?.status === "error" ? "service-status-error" : ""}`}><span /> {valueOrDash(storiesData?.status).toUpperCase()}</span></div><h3>{storiesData?.status === "error" ? "Stories not available." : "Stories service responded."}</h3><p>The endpoint returned a service state alongside the profile metadata.</p><div className="service-meta"><span><span className="data-label">COUNTRY</span><strong><TypingText value={storiesData?.country} delay={430} speed={38} /></strong></span><span><span className="data-label">SERVER CODE</span><strong><TypingText value={storiesData?.serverCode} delay={490} speed={38} /></strong></span></div></div>
                 </div>
               </section>
 
               <section className="raw-card panel-surface">
                 <div className="raw-heading"><div><SectionLabel number="05">RAW RESPONSE</SectionLabel><p>Original payload returned by the upstream service.</p></div><div className="raw-meta"><span><span className="data-label">HTTP</span><strong>{requestInfo.httpStatus}</strong></span><span><span className="data-label">TIME</span><strong>{requestInfo.elapsed}</strong></span><span><span className="data-label">AT</span><strong>{requestInfo.requestedAt}</strong></span></div></div>
-                <div className="code-window"><div className="code-window-top"><span><i /><i /><i /></span><span className="mono-muted">response.json</span><span className="mono-muted">UTF-8</span></div><pre>{rawText}</pre></div>
+                <div className="code-window"><div className="code-window-top"><span><i /><i /><i /></span><span className="mono-muted">response.json</span><span className="mono-muted">UTF-8</span></div><pre><TypingText value={rawText} delay={540} speed={2} /></pre></div>
               </section>
             </>
           )}

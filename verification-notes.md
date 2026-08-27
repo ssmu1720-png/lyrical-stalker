@@ -24,3 +24,7 @@ On 2026-08-27, the provided endpoint returned HTTP 200 for `username=__` with `s
 ## Browser flow
 
 A handle was entered, Enter submitted the form, the loading state rendered, and the success state resolved with the profile identity, audience counters, schema key list, story service state, and pretty-printed raw response. The observed example returned `posts: 328`, `followers: 4K`, `following: 83`, and a story service error state with country `CA` and server code `8`; this is displayed as returned data, not fabricated content.
+
+## Enhancement verification
+
+The updated console still resolved the provided API successfully for `username=__`. The success state visibly retained the live profile, counters, schema, story service state, and raw response. The clear control is present in the request panel and is disabled in the idle state, ready to reset an active console.
