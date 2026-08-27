@@ -1,6 +1,6 @@
-# Console Enhancement Checklist
+# Digital Rain Enhancement Checklist
 
-- [x] Add a terminal-style typing reveal for the successful data display.
-- [x] Add a clear/reset control that cancels active animation and returns the console to its initial state.
-- [x] Preserve reduced-motion behavior and keyboard accessibility.
-- [x] Verify success, reset, and responsive states, then save a checkpoint.
+- [x] Add a Matrix-style digital rain layer behind the console content.
+- [x] Keep the effect subtle, pointer-safe, and performant across viewport sizes.
+- [x] Respect reduced-motion preferences and preserve readable contrast.
+- [x] Verify the updated preview and save a checkpoint.

@@ -76,3 +76,10 @@ The mark is a compact lime square containing three offset inspection brackets—
 - Use Space Grotesk + IBM Plex Mono; avoid Inter and generic purple gradients.
 - Treat the API endpoint and response schema as visible product content.
 - Use custom generated graphics only for the brand mark and subtle console atmosphere; the data remains the visual hero.
+
+## Style Decisions
+
+- Signal Lime #C6F36B is functional, not decorative: reserve it for actions, active states, verified values, cursor/rule accents, section indices, and the digital rain signal glyphs.
+- The first viewport should read as an inspection console before it reads as a landing page: strengthen endpoint ribbons, readout framing, and visible schema cues around the request and empty states.
+- The brand mark should always include the compact lime bracket glyph and a customized Space Grotesk wordmark treatment so the identity reads as an instrument label, not a default sidebar title.
+- The Matrix rain stays atmospheric and low contrast, with a stronger presence at the outer edges and reduced intensity on narrow screens so data remains primary.

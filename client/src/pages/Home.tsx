@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import MatrixRain from "@/components/MatrixRain";
 
 type Metadata = {
   username?: string;
@@ -245,6 +246,7 @@ export default function Home() {
   return (
     <div className="console-shell">
       <div className="ambient-grid" aria-hidden="true" />
+      <MatrixRain />
       <aside className={`command-rail ${mobileRailOpen ? "command-rail-open" : ""}`}>
         <div className="rail-brand">
           <div className="brand-mark-wrap"><img src="/manus-storage/ig-stalker-mark_34fa3d50.png" alt="" className="brand-mark" /></div>
@@ -287,11 +289,12 @@ export default function Home() {
             <div className="hero-art" aria-hidden="true" />
             <div className="hero-copy">
               <div className="eyebrow"><span className="eyebrow-line" /> PUBLIC PROFILE LOOKUP</div>
-              <h1>Inspect a<br /><em>public profile.</em></h1>
+              <h1>Inspect a<br /><em>public profile<span className="hero-mark">.</span></em></h1>
               <p className="hero-subcopy">Enter a handle and map the surface. Fast, structured, and deliberately transparent.</p>
             </div>
             <div className="hero-aside">
               <div className="hero-aside-label">DATA SURFACE <span>01</span></div>
+              <div className="hero-trace"><span>TRACE / 001</span><span className="hero-trace-line" /></div>
               <p>Metadata, audience counts, bio, avatar, and story service state.</p>
               <div className="hero-aside-rule" />
               <span className="mono-muted">GET /api/stalker/ig</span>
@@ -333,7 +336,7 @@ export default function Home() {
             <section className="empty-readout panel-surface">
               <div className="empty-art"><Activity size={24} /></div>
               <div><SectionLabel number="01">AWAITING INPUT</SectionLabel><h2>No profile loaded yet.</h2><p>Run a lookup to populate the identity, audience, and service panels with the API response.</p></div>
-              <div className="empty-aside"><span className="mono-muted">TIP</span><strong>Use @ or plain handle</strong><span className="mono-muted">ENTER TO EXECUTE</span></div>
+              <div className="empty-aside"><span className="mono-muted">READY BUFFER</span><div className="empty-data-row"><span>metadata</span><strong>awaiting</strong></div><div className="empty-data-row"><span>audience</span><strong>awaiting</strong></div><span className="mono-muted">ENTER TO EXECUTE</span></div>
             </section>
           )}
 
