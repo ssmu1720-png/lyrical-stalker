@@ -53,6 +53,7 @@ type ApiPayload = {
 
 const API_ROOT = "https://api.kyzzz.xyz/api/stalker/ig";
 const API_KEY = "kyzz60729265415646";
+const FALLBACK_PROFILE_IMAGE = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=320&q=80";
 
 const starterFields = [
   ["result.metadata.username", "string"],
@@ -143,6 +144,7 @@ export default function Home() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [avatarFailed, setAvatarFailed] = useState(false);
+  const [fallbackImageFailed, setFallbackImageFailed] = useState(false);
   const [requestInfo, setRequestInfo] = useState({ elapsed: "—", requestedAt: "—", httpStatus: "—" });
   const [mobileRailOpen, setMobileRailOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -187,6 +189,7 @@ export default function Home() {
     setStatus("idle");
     setErrorMessage("");
     setAvatarFailed(false);
+    setFallbackImageFailed(false);
     setRequestInfo({ elapsed: "—", requestedAt: "—", httpStatus: "—" });
     window.requestAnimationFrame(() => inputRef.current?.focus());
     toast.success("Console cleared.");
@@ -207,6 +210,7 @@ export default function Home() {
     setPayload(null);
     setRawResponse(null);
     setAvatarFailed(false);
+    setFallbackImageFailed(false);
     setRequestInfo((current) => ({ ...current, httpStatus: "…", elapsed: "…", requestedAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }) }));
 
     try {
@@ -241,6 +245,7 @@ export default function Home() {
   }
 
   const profileHandle = metadata?.username || normalized;
+  const hasReturnedAvatar = Boolean(metadata?.avatar) && !avatarFailed;
   const rawText = rawResponse ? JSON.stringify(rawResponse, null, 2) : "// Waiting for a request…\n// Press / to focus the handle field.";
 
   return (
@@ -251,8 +256,8 @@ export default function Home() {
         <div className="rail-brand">
           <div className="brand-mark-wrap"><img src="/manus-storage/ig-stalker-mark_34fa3d50.png" alt="" className="brand-mark" /></div>
           <div>
-            <span className="brand-kicker">IG / STALKER</span>
-            <strong>console<span className="brand-dot">.</span></strong>
+            <span className="brand-kicker">PROFILE / INSPECTOR</span>
+            <strong>lyrical<span className="brand-dot">.</span></strong><span className="brand-wordmark-tail">STALKER</span>
           </div>
           <button className="rail-close" aria-label="Close menu" onClick={() => setMobileRailOpen(false)}><X size={16} /></button>
         </div>
@@ -273,7 +278,7 @@ export default function Home() {
             <ShieldCheck size={15} />
             <p>Only public profile surfaces are requested. No login required.</p>
           </div>
-          <div className="rail-footer"><span>v2.0.4</span><span>KYZZ API</span></div>
+          <div className="rail-footer"><span>v2.0.4</span><span>LYRICAL / API</span></div>
         </div>
       </aside>
 
@@ -291,6 +296,7 @@ export default function Home() {
               <div className="eyebrow"><span className="eyebrow-line" /> PUBLIC PROFILE LOOKUP</div>
               <h1>Inspect a<br /><em>public profile<span className="hero-mark">.</span></em></h1>
               <p className="hero-subcopy">Enter a handle and map the surface. Fast, structured, and deliberately transparent.</p>
+              <div className="hero-console-strip"><span><i className="strip-dot" /> STATE / ARMED</span><span>RESPONSE / JSON</span><span>READONLY / TRUE</span></div>
             </div>
             <div className="hero-aside">
               <div className="hero-aside-label">DATA SURFACE <span>01</span></div>
@@ -355,10 +361,10 @@ export default function Home() {
                   <div className="panel-heading-row"><SectionLabel number="01">IDENTITY</SectionLabel><span className="verified-tag"><Check size={12} /> RESOLVED</span></div>
                   <div className="identity-row">
                     <div className="avatar-frame">
-                      {metadata.avatar && !avatarFailed ? <img src={metadata.avatar} alt={`${valueOrDash(metadata.fullName)} profile avatar`} onError={() => setAvatarFailed(true)} /> : <div className="avatar-fallback">{getInitials(metadata.fullName, profileHandle)}</div>}
+                      {fallbackImageFailed ? <div className="avatar-fallback">{getInitials(metadata.fullName, profileHandle)}</div> : <img src={hasReturnedAvatar ? metadata.avatar : FALLBACK_PROFILE_IMAGE} alt={hasReturnedAvatar ? `${valueOrDash(metadata.fullName)} profile avatar` : "Visual profile image fallback"} loading="eager" decoding="async" onLoad={() => setFallbackImageFailed(false)} onError={() => hasReturnedAvatar ? setAvatarFailed(true) : setFallbackImageFailed(true)} />}
                       <span className="avatar-corner" />
                     </div>
-                    <div className="identity-copy"><span className="handle">@<TypingText value={profileHandle} delay={60} speed={34} /></span><h2><TypingText value={metadata.fullName} delay={120} speed={34} /></h2><span className="identity-source"><Instagram size={13} /> instagram / public</span></div>
+                    <div className="identity-copy"><span className="handle">@<TypingText value={profileHandle} delay={60} speed={34} /></span><h2><TypingText value={metadata.fullName} delay={120} speed={34} /></h2><span className="identity-source"><Instagram size={13} /> instagram / public</span><span className="image-status"><span /> {hasReturnedAvatar ? "PROFILE IMAGE / RETURNED" : "IMAGE / FALLBACK"}</span></div>
                   </div>
                   <p className="bio"><TypingText value={metadata.bio} delay={220} speed={9} /></p>
                   <div className="identity-footer"><span className="mono-muted">SOURCE / KYZZ</span><a href={`https://www.instagram.com/${profileHandle}`} target="_blank" rel="noreferrer">Open profile <ExternalLink size={13} /></a></div>

@@ -1,4 +1,4 @@
-# IG Stalker Console — Design Brainstorm
+# Lyrical Stalker — Design Brainstorm
 
 ## Approach 1 — Terminal Noir
 **Theme Name:** Terminal Noir
@@ -83,3 +83,9 @@ The mark is a compact lime square containing three offset inspection brackets—
 - The first viewport should read as an inspection console before it reads as a landing page: strengthen endpoint ribbons, readout framing, and visible schema cues around the request and empty states.
 - The brand mark should always include the compact lime bracket glyph and a customized Space Grotesk wordmark treatment so the identity reads as an instrument label, not a default sidebar title.
 - The Matrix rain stays atmospheric and low contrast, with a stronger presence at the outer edges and reduced intensity on narrow screens so data remains primary.
+
+## Lyrical Stalker Rebrand Decisions
+
+The product name is now **Lyrical Stalker**. The Terminal Noir system shifts from signal lime to a signal-red palette: warm ink remains the canvas, graphite remains the surface, red marks executable and verified states, and pale rose replaces amber for secondary metadata. The digital rain also uses red glyphs so the atmosphere belongs to one coherent terminal language.
+
+The profile image is a first-class returned field rather than decoration. When the API supplies `result.metadata.avatar`, the success readout shows it as a large circular identity image with a visible `PROFILE IMAGE / RETURNED` status; the interface falls back to initials only when the remote image fails or is absent.

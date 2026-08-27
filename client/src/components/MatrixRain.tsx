@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 
 const GLYPHS = "01アイウエオカキクケコサシスセソタチツテトナニヌネノ<>[]{}/*+-=#$%";
-
 export default function MatrixRain() {
-  // Terminal Noir: matrix glyphs stay secondary to the warm ink UI, using signal lime
+  // Lyrical Stalker: matrix glyphs stay secondary to the warm ink UI, using signal red
   // as a low-opacity atmosphere and never competing with readable response content.
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -50,7 +49,7 @@ export default function MatrixRain() {
         const y = drop * fontSize;
         const glyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
         const isSignalColumn = column % 9 === 0;
-        context.fillStyle = isSignalColumn ? "rgba(198, 243, 107, 0.64)" : "rgba(198, 243, 107, 0.22)";
+        context.fillStyle = isSignalColumn ? "rgba(255, 77, 87, 0.64)" : "rgba(199, 90, 96, 0.24)";
         context.fillText(glyph, x, y);
 
         if (y > height && Math.random() > 0.974) {

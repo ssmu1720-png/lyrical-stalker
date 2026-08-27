@@ -1,6 +1,6 @@
-# Digital Rain Enhancement Checklist
+# Lyrical Stalker Rebrand Checklist
 
-- [x] Add a Matrix-style digital rain layer behind the console content.
-- [x] Keep the effect subtle, pointer-safe, and performant across viewport sizes.
-- [x] Respect reduced-motion preferences and preserve readable contrast.
-- [x] Verify the updated preview and save a checkpoint.
+- [x] Rename visible product and page metadata to Lyrical Stalker.
+- [x] Convert the Terminal Noir palette and accents to a red terminal system.
+- [x] Make the API-returned profile image more prominent and reliable in the profile readout.
+- [x] Verify contrast, image rendering, responsive behavior, and save a checkpoint.
